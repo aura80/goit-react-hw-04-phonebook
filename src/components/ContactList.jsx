@@ -1,23 +1,17 @@
-import PropTypes from 'prop-types';
+import { ContactContext } from './ContactContext';
+import { useContext } from 'react';
 import ContactItem from './ContactItem';
 
-const ContactList = ({ contacts, onDeleteContact }) => (
-  <ul>
-    {contacts.map(contact => (
-      <ContactItem key={contact.id} {...contact} onDeleteContact={onDeleteContact} />
-    ))}
-  </ul>
-);
+const ContactList = () => {
+  const { contacts, onDeleteContact } = useContext(ContactContext);
 
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  onDeleteContact: PropTypes.func.isRequired
+  return (
+    <ul>
+      {contacts.map(contact => (
+        <ContactItem key={contact.id} {...contact} onDeleteContact={onDeleteContact} />
+      ))}
+    </ul>
+  );
 };
 
 export default ContactList;

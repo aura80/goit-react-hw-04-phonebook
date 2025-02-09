@@ -1,10 +1,19 @@
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { useState, useEffect, useRef, useContext } from 'react';
+import { ContactContext } from './ContactContext';
+// import PropTypes from 'prop-types';
 import styles from './ContactForm.module.css';
 
-const ContactForm = ({onAddContact}) => {
+const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  // accessing the context
+  const { onAddContact } = useContext(ContactContext);
+
+  // creates references for inputs
+  const nameInputRef = useRef(null);
+  const numberInputRef = useRef(null);
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     const savedName = localStorage.getItem('name');
@@ -49,6 +58,8 @@ const ContactForm = ({onAddContact}) => {
     onAddContact(name, number);
     setName('');
     setNumber('');
+    nameInputRef.current.focus();
+    console.log('Button submit is: ', buttonRef.current)
   };
 
   return (
@@ -64,6 +75,7 @@ const ContactForm = ({onAddContact}) => {
           required
           value={name}
           onChange={handleChange}
+          ref={nameInputRef} // assigns the reference
         />
       </label>
       <label className={styles.labelclass}>
@@ -77,17 +89,19 @@ const ContactForm = ({onAddContact}) => {
           required
           value={number}
           onChange={handleChange}
+          ref={numberInputRef} // assigns the reference
         />
       </label>
-      <button type="submit" className={styles.buttonclass}>
+      <button type="submit" ref={buttonRef} className={styles.buttonclass}>
         Add contact
       </button>
     </form>
   );
 };
 
-ContactForm.propTypes = {
-  onAddContact: PropTypes.func.isRequired,
-};
+// no need since we use context
+// ContactForm.propTypes = {
+//   onAddContact: PropTypes.func.isRequired,
+// };
 
 export default ContactForm;

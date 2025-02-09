@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import { ContactContext } from './ContactContext';
 import { nanoid } from "nanoid";
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
-import styles from './ContactForm.module.css';
 import Filter from './Filter';
+import styles from './ContactForm.module.css';
 
 export const App = () => {
   const [contacts, setContacts] = useState(() => { 
@@ -72,15 +73,22 @@ export const App = () => {
   const filteredContacts = getFilteredContacts();
 
   return (
-    <div className={styles.phonebook}>
-      <h1>Phonebook</h1>
-      <ContactForm onAddContact={handleAddContact} />
-      <h2>Contacts</h2>
-      <Filter value={filter} onChange={handleFilterChange} />
-      <ContactList
-        contacts={filteredContacts}
-        onDeleteContact={handleDeleteContact}
-      />
-    </div>
+    <ContactContext.Provider
+      value={{
+        contacts: filteredContacts,
+        onAddContact: handleAddContact,
+        onDeleteContact: handleDeleteContact,
+        filter,
+        onFilterChange: handleFilterChange,
+      }}
+    >
+      <div className={styles.phonebook}>
+        <h1>Phonebook</h1>
+        <ContactForm />
+        <h2>Contacts</h2>
+        <Filter />
+        <ContactList />
+      </div>
+    </ContactContext.Provider>
   );
 }

@@ -1,26 +1,34 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+import { ContactContext } from './ContactContext';
+import { useContext } from 'react';
 
-const Filter = ({ value, onChange }) => (
-  <div>
-    <label>
-      Find contacts by Name
-      <input
-        type="text"
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        style={{  marginLeft: '10px' }}
-      />
-    </label>
-  </div>
-);
+const Filter = () => {
+  const { filter, onFilterChange } = useContext(ContactContext);
 
-Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  const handleFilterChange = event => {
+    onFilterChange(event.target.value);
+  }
+
+  return (
+    <div>
+      <label>
+        Find contacts by Name
+        <input
+          type="text"
+          value={filter}
+          onChange={handleFilterChange}
+          style={{ marginLeft: '10px' }}
+        />
+      </label>
+    </div>
+  );
 };
 
-export default Filter;
-
-
-// e => onChange(e.target.value) is a function of change defined inline
+// no need since we added context
+// Filter.propTypes = {
+//   value: PropTypes.string.isRequired,
+//   onChange: PropTypes.func.isRequired,
+// };
 // e.target.value is the current value of the input
+
+export default Filter;
